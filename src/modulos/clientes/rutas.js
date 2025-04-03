@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     const clientes = await controlador.todos();
     respuestas.success(req, res, 200, clientes);
   } catch (error) {
-    respuestas.error(req, res, 500, error);
+    respuestas.error(req, res, 500, error.message);
   }
 });
 
@@ -17,44 +17,39 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const cliente = await controlador.uno(req.params.id);
-    if (!cliente || cliente.length === 0) {
+    if (!cliente) {
       return respuestas.error(req, res, 404, 'Cliente no encontrado');
     }
     respuestas.success(req, res, 200, cliente);
   } catch (error) {
-    respuestas.error(req, res, 500, error);
+    respuestas.error(req, res, 500, error.message);
   }
 });
 
-// Agregar un nuevo cliente  
-// Se asume que para insertar se envía id = 0 o no se envía id
+// Agregar un nuevo cliente (inserción)
 router.post('/agregar', async (req, res) => {
   try {
-    // Para insertar, forzamos id a 0 en caso de no venir definido
-    const data = { ...req.body, id: 0 };
-    await controlador.agregar(data);
+    await controlador.agregar(req.body);
     respuestas.success(req, res, 200, 'Cliente insertado');
   } catch (error) {
-    respuestas.error(req, res, 500, error);
+    respuestas.error(req, res, 500, error.message);
   }
 });
 
-// Actualizar un cliente existente  
-// Se requiere que req.body incluya el id del cliente a actualizar
+// Actualizar un cliente existente
 router.post('/actualizar', async (req, res) => {
   try {
     if (!req.body.id) {
       return respuestas.error(req, res, 400, 'El id es requerido para actualizar');
     }
-    await controlador.agregar(req.body);
+    await controlador.actualizar(req.body);
     respuestas.success(req, res, 200, 'Cliente actualizado');
   } catch (error) {
-    respuestas.error(req, res, 500, error);
+    respuestas.error(req, res, 500, error.message);
   }
 });
 
-// Eliminar un cliente  
-// Se requiere que req.body incluya el id del cliente a eliminar
+// Eliminar un cliente
 router.post('/eliminar', async (req, res) => {
   try {
     if (!req.body.id) {
@@ -63,7 +58,7 @@ router.post('/eliminar', async (req, res) => {
     await controlador.eliminar(req.body.id);
     respuestas.success(req, res, 200, 'Cliente eliminado');
   } catch (error) {
-    respuestas.error(req, res, 500, error);
+    respuestas.error(req, res, 500, error.message);
   }
 });
 
