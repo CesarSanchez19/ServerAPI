@@ -1,7 +1,7 @@
 const express = require('express');
 const config = require('./config');
 const clientes = require('./modulos/clientes/rutas');
-const usuarios = require('./modulos/usuarios/rutasUsuarios'); // Asegúrate de tener este módulo o coméntalo
+const usuarios = require('./modulos/usuarios/rutasUsuarios'); // Se agregó el módulo de usuarios
 
 const app = express();
 app.use(express.json());
