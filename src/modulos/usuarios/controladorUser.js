@@ -32,8 +32,17 @@ async function registrar(data) {
   if (!data.password) {
     throw new Error('La contraseña es requerida');
   }
+  // Verificar que los campos nombre_usuario y correo_electronico estén presentes
+  if (!data.nombre_usuario || !data.correo_electronico) {
+    throw new Error('El nombre de usuario y el correo electrónico son requeridos');
+  }
   const encryptedPassword = await encryptPassword(data.password);
-  const userData = { ...data, password: encryptedPassword, id: 0 }; // fuerza inserción
+  const userData = {
+    nombre_usuario: data.nombre_usuario,
+    correo_electronico: data.correo_electronico,
+    password: encryptedPassword,
+    estatus: data.estatus || 'activo'
+  };
   const result = await db.insertar(TABLA, userData);
   console.log('Usuario registrado:', { ...userData, id: result.insertId });
   return result;
@@ -59,12 +68,12 @@ async function eliminar(id) {
   return result;
 }
 
-// Login: autentica al usuario verificando el email y la contraseña
+// Login: autentica al usuario verificando el correo electrónico y la contraseña
 async function login(data) {
-  if (!data.email || !data.password) {
-    throw new Error('Email y contraseña son requeridos');
+  if (!data.correo_electronico || !data.password) {
+    throw new Error('Correo electrónico y contraseña son requeridos');
   }
-  const user = await db.unoByEmail(TABLA, data.email);
+  const user = await db.unoByEmail(TABLA, data.correo_electronico);
   if (!user) {
     throw new Error('Usuario no encontrado');
   }
@@ -72,7 +81,7 @@ async function login(data) {
   if (!isMatch) {
     throw new Error('Contraseña incorrecta');
   }
-  console.log(`Usuario logueado con email ${data.email}`);
+  console.log(`Usuario logueado con correo electrónico ${data.correo_electronico}`);
   return user;
 }
 

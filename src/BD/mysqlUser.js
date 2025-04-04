@@ -13,7 +13,7 @@ let conexion;
 async function conMysql() {
   try {
     conexion = await mysql.createConnection(dbconfig);
-    console.log('✅ BD conectada (Usuarios)');
+    console.log('✅ BD conectada (Tabla Usuarios)');
     conexion.on('error', async (err) => {
       console.error('[BD ERROR]', err);
       if (err.code === 'PROTOCOL_CONNECTION_LOST') {
@@ -40,8 +40,8 @@ async function uno(tabla, id) {
   return result[0];
 }
 
-async function unoByEmail(tabla, email) {
-  const [result] = await conexion.query(`SELECT * FROM ${tabla} WHERE email = ?`, [email]);
+async function unoByEmail(tabla, correo_electronico) {
+  const [result] = await conexion.query(`SELECT * FROM ${tabla} WHERE correo_electronico = ?`, [correo_electronico]);
   return result[0];
 }
 

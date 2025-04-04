@@ -14,7 +14,7 @@ let conexion;
 async function conMysql() {
   try {
     conexion = await mysql.createConnection(dbconfig);
-    console.log('✅ BD conectada');
+    console.log('✅ BD conectada (Tabla Clientes)');
 
     // Manejo de errores de conexión
     conexion.on('error', async (err) => {
