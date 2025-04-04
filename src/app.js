@@ -1,15 +1,16 @@
 const express = require('express');
+const cors = require('cors'); // Importa cors
 const config = require('./config');
 const clientes = require('./modulos/clientes/rutas');
-const usuarios = require('./modulos/usuarios/rutasUsuarios'); // Se agregó el módulo de usuarios
+const usuarios = require('./modulos/usuarios/rutasUsuarios');
 
 const app = express();
+
+app.use(cors()); // Se activa CORS para todas las rutas
 app.use(express.json());
 
-// Configuración del puerto
 app.set('port', config.app.port);
 
-// Rutas
 app.use('/api/clientes', clientes);
 app.use('/api/usuarios', usuarios);
 
